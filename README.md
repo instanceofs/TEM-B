@@ -1,4 +1,11 @@
-# item-b
+# bai-tools
+
+npm i bai-tools  ||  npm install bai-tools --save
+
+
+import gs from 'bai-tools'
+Vue.prototype.gs = gs
+
 
 ## Project setup
 ```

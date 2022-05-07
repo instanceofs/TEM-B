@@ -1,11 +1,19 @@
 {
-  "name": "item-b",
-  "version": "0.1.0",
-  "private": true,
+  "name": "bai-tools",
+  "version": "1.0.0",
+  "description": "UI FUN",
+  "main": "dist/B.umd.min.js",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "author": "glm",
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name B --dest dist packages/index.js"
   },
   "dependencies": {
     "core-js": "^3.8.3",

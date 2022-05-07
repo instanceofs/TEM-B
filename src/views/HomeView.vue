@@ -13,6 +13,9 @@ export default {
   name: 'HomeView',
   components: {
     HelloWorld
+  },
+  created(){
+    console.log(this.B)
   }
 }
 </script>
