@@ -1,10 +1,11 @@
 //import daqModuleConfig from './daq-module-config/index'
 import B from './b-tool'
-import Vue, { VueConstructor } from 'vue';
+
+//import Vue, { VueConstructor } from 'vue';
 const components = [
     B,
 ]
-const install = function (Vue,options) {
+const install = function (Vue) {
   components.forEach((componentName) => {
     Vue.component(componentName.name, componentName)
   })
