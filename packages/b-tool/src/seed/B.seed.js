@@ -22,7 +22,7 @@ function getLogger(logger){
 }
 B = {
     __BUILD_TIME: '2021-12-12',
-    VERSION: '0.01',
+    VERSION: '1.0.1',
     Env: {
         host: self
     },

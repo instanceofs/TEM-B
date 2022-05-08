@@ -8,14 +8,14 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
-
+import {B} from '../../packages/index'
 export default {
   name: 'HomeView',
   components: {
     HelloWorld
   },
   created(){
-    console.log(this.B)
+    console.log(B)
   }
 }
 </script>

@@ -198,7 +198,6 @@ let B = require('./B.seed');
 //                B.download(link, fileName)
 //            })
 //    }
-
     });
 })(B);
 

@@ -6,9 +6,9 @@ Vue.config.productionTip = false
 
 //
 import {B} from '../packages/index'
-Vue.use(B)
-console.log(window.B)
-
+//Vue.use(B)
+//console.log(window.B)
+console.log(B)
 new Vue({
   router,
   store,

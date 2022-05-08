@@ -1,74 +1,95 @@
-let B=require('./B.seed');
+import B from "./B.seed";
 /**
  * Date Model
  */
-(function (B) {
+(function (B){
     var AP = Date.prototype;
-    AP.addDays = AP.addDays || function (days) {
-            this.setDate(this.getDate() + days);
-            return this;
-        };
-    // var weeks = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    AP.addDays = AP.addDays || function (days){
+        this.setDate(this.getDate() + days);
+        return this;
+    };
+    AP.addWeeks = AP.addWeeks || function (weeks){
+        this.addDays(weeks * 7);
+        return this;
+    };
+    AP.addMonths = AP.addMonths || function (months){
+        var d = this.getDate();
+        this.setMonth(this.getMonth() + months);
+        if(this.getDate() < d)
+            this.setDate(0);
+        return this;
+    };
+    AP.addYears = AP.addYears || function (year){
+        var m = this.getMonth();
+        this.setFullYear(this.getFullYear() + year);
+        if(m < this.getMonth()){
+            this.setDate(0);
+        }
+        return this;
+    };
     var weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
     var weeksEn = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-    AP.format = AP.format || function (strFormat) {
-            if (strFormat === 'soon' || strFormat === 'week') {
-                var left = this.left();
-                if (left.dd < 5) {
-                    var str = '';
-                    var dd = B.now().getDate() - this.getDate();
-                    if (left.dd == 0 && dd != 0) {
-                        left.status = dd < 0;
-                        left.dd = 1;
-                    }
-                    if (left.dd > 0) {
-                        if (left.dd == 1)
-                            return (left.status ? "明天" : "昨天") + this.format(' hh:mm');
-                        if (strFormat == 'week') {
-                            return weeks[this.getDay()];
-                        } else {
-                            str = left.dd + '天';
-                        }
-                    } else if (left.hh > 0) {
-                        str = left.hh + '小时';
-                    } else if (left.mm > 0) {
-                        str = left.mm + '分钟';
-                    } else if (left.ss > 10) {
-                        str = left.ss + '秒';
+    var APS = ["上午", "下午", '晚上'];
+    AP.format = AP.format || function (strFormat){
+        if(strFormat === 'soon' || strFormat === 'week'){
+            var left = this.left();
+            if(left.dd < 5){
+                var str = '';
+                var dd = B.now().getDate() - this.getDate();
+                if(left.dd == 0 && dd != 0){
+                    left.status = dd < 0;
+                    left.dd = 1;
+                }
+                if(left.dd > 0){
+                    if(left.dd == 1)
+                        return (left.status ? "明天" : "昨天") + this.format(' hh:mm');
+                    if(strFormat == 'week'){
+                        return weeks[this.getDay()];
                     } else {
-                        return '刚刚';
+                        str = left.dd + '天';
                     }
-                    return str + (left.status ? '后' : '前');
+                } else if(left.hh > 0){
+                    str = left.hh + '小时';
+                } else if(left.mm > 0){
+                    str = left.mm + '分钟';
+                } else if(left.ss > 10){
+                    str = left.ss + '秒';
+                } else {
+                    return '刚刚';
                 }
-                strFormat = 'yyyy-MM-dd';
+                return str + (left.status ? '后' : '前');
             }
-            if (strFormat === "date")
-                return this;
-            var o = {
-                "M+": this.getMonth() + 1,
-                "d+": this.getDate(),
-                "h+": this.getHours(),
-                "m+": this.getMinutes(),
-                "s+": this.getSeconds(),
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-                "S": this.getMilliseconds() //毫秒
-            };
-            if (/(y+)/.test(strFormat))
-                strFormat = strFormat.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            for (var k in o) {
-                if (new RegExp("(" + k + ")").test(strFormat)) {
-                    strFormat =
-                        strFormat.replace(RegExp.$1, (RegExp.$1.length == 1) ?
-                            (o[k]) :
-                            (("00" + o[k]).substr(("" + o[k]).length)));
-                }
-            }
-            return strFormat;
+            strFormat = 'yyyy-MM-dd';
+        }
+        if(strFormat === "date")
+            return this;
+        var o = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
         };
-    AP.left = function () {
+        if(/(y+)/.test(strFormat))
+            strFormat = strFormat.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o) {
+            if(new RegExp("(" + k + ")").test(strFormat)){
+                strFormat =
+                    strFormat.replace(RegExp.$1, (RegExp.$1.length == 1) ?
+                        (o[k]) :
+                        (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return strFormat;
+    };
+
+
+    AP.left = function (){
         var arr = {status: true};
         var nDifference = this - (new Date());
-        if (nDifference < 0) {
+        if(nDifference < 0){
             arr.status = false;
             nDifference = Math.abs(nDifference);
         }
@@ -96,20 +117,24 @@ let B=require('./B.seed');
          * @param isChEn
          * @returns {string}
          */
-        getweek: function(date,isChEn) {
+        getweek: function (date, isChEn){
             return (isChEn === 'en' ? weeksEn : weeks)[new Date(date).getDay()]
+//      return weeks[new Date(date).getDay()];
         },
         /**
          * 当前时间戳
          */
-        nowTick: Date.now || function () {
+        nowTick: Date.now || function (){
             return +new Date();
+            //  当前时间戳
+            //  参入参数 ios.replace(/-/g, '/') 处理
+            //
         },
         /**
-         * 现在的时间
+         * 现在的时
          * @returns {Date}
          */
-        now: function () {
+        now: function (){
             return new Date(B.nowTick());
         },
         /**
@@ -118,10 +143,21 @@ let B=require('./B.seed');
          * @param days
          * @returns {*}
          */
-        addDays: function (date, days) {
-            if (!B.isDate(date)) return B.now();
+        addDays: function (date, days){
+            if(!B.isDate(date)) return B.now();
             days = (B.isNumber(days) ? days : 0);
             return new Date(date.addDays(days));
+        },
+        /**
+         * 添加年
+         * @param date
+         * @param days
+         * @returns {*}
+         */
+        addYear: function (date, year){
+            if(!B.isDate(date)) return B.now();
+            year = (B.isNumber(year) ? year : 0);
+            return new Date(date.addYears(year));
         },
         /**
          * 格式化时间
@@ -161,7 +197,7 @@ let B=require('./B.seed');
          * @param date
          * @returns {*}
          */
-        leftTime: function (date) {
+        leftTime: function (date){
             return date.left();
         },
         /**
@@ -173,9 +209,10 @@ let B=require('./B.seed');
             if(B.isUndefined(date)){
                 date = B.now()
             }
-            ;
             let hour = date instanceof Date ? new Date(date).getHours() : new Date(date.replace(/-/g, "/")).getHours();
             return APS[12 > hour ? 0 : 17 > hour ? 1 : 24 > hour ? 2 : 2];
         }
     });
 })(B);
+
+
