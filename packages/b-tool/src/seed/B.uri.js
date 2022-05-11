@@ -23,6 +23,15 @@ let B = require('./B.seed');
             }, {});
         },
         /**
+         * url解码
+         * @param  url
+         * @param {String} url 这是url的一部分被解码.
+         * @return {String} 解码的url部分字符串
+         */
+        urlDecode: function(url) {
+            return decodeURIComponent(url.replace(/\+/g, " "))
+        },
+        /**
          * url编码
          * @param  url
          * @return {String} 已编码的url部分字符串
